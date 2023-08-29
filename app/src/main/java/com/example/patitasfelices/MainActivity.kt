@@ -19,6 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.patitasfelices.ui.theme.PatitasFelicesTheme
 import kotlinx.coroutines.Dispatchers
@@ -57,26 +58,50 @@ fun MyApp() {
     Column(
         modifier = Modifier.padding(16.dp)
     ) {
-        val connectionState by produceState(initialValue = "Desconectado") {
-            val connection = viewModel.connectToDatabase()
-            value = if (connection != null) {
-                connection.close() // Cierra la conexión después de conectarse
-                "Conectado"
-            } else {
-                "Desconectado"
-            }
-        }
+        val userState = viewModel.getUserInfo()
 
-        Text(text = "Estado de la conexión: $connectionState")
+        if (userState.value != null) {
+            val userInfo = userState.value!! // Accede al valor del State
+            Text(text = "Nombre: ${userInfo.nombre}")
+            Text(text = "Apellido: ${userInfo.apellido}")
+            Text(text = "Correo: ${userInfo.correo}")
+            Text(text = "Rol: ${userInfo.rol}")
+        } else {
+            Text(text = "No se pudo obtener la información del usuario")
+        }
     }
 }
+
+data class UserInfo(
+    val nombre: String,
+    val apellido: String,
+    val correo: String,
+    val rol: String
+)
 
 class MyViewModel : ViewModel() {
-    fun connectToDatabase(): Connection? {
-        return DatabaseHelper.connectToDatabase()
+    fun getUserInfo(): State<UserInfo?> {
+        val userState = mutableStateOf<UserInfo?>(null)
+        viewModelScope.launch {
+            val connection = DatabaseHelper.connectToDatabase()
+            if (connection != null) {
+                withContext(Dispatchers.IO) {
+                    val resultSet = connection.createStatement().executeQuery("SELECT * FROM usuario")
+                    if (resultSet.next()) {
+                        val nombre = resultSet.getString("nombre")
+                        val apellido = resultSet.getString("apellido")
+                        val correo = resultSet.getString("correo")
+                        val rol = resultSet.getString("rol")
+                        connection.close()
+                        userState.value = UserInfo(nombre, apellido, correo, rol)
+                    }
+                    connection.close()
+                }
+            }
+        }
+        return userState
     }
 }
-
 
 
 @Preview(showBackground = true)
