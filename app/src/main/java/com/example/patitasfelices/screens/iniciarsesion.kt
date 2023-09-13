@@ -56,6 +56,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import com.example.patitasfelices.screens.registrar
 import androidx.compose.ui.text.withStyle
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 
 
 @Composable
@@ -93,7 +97,6 @@ fun iniciarsesion(navController: NavController) {
             ) {
                 Text(
                     text = "Iniciar Sesión",
-
                     fontSize = 34.5.sp,
                     fontWeight = FontWeight.Black,
                     textAlign = TextAlign.Center,
@@ -108,26 +111,13 @@ fun iniciarsesion(navController: NavController) {
                         .fillMaxWidth()
                         .padding(horizontal = 8.dp)
                 ) {
-                    Text("Correo Electrónico", modifier = Modifier.padding(bottom = 4.dp))
-                    BasicTextField(
-                        value = "",
-                        onValueChange = {},
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 8.dp)
-                            .background(Color(android.graphics.Color.parseColor("#D9D9D9")))
-                            .border(1.dp, Color.Gray, RoundedCornerShape(16.dp))
-                    )
-                    Text("Contraseña", modifier = Modifier.padding(bottom = 4.dp))
-                    BasicTextField(
-                        value = "",
-                        onValueChange = {},
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 16.dp)
-                            .background(Color(android.graphics.Color.parseColor("#D9D9D9")))
-                            .border(1.dp, Color.Gray, RoundedCornerShape(16.dp))
-                    )
+
+
+                    var emailText by rememberSaveable { mutableStateOf("") }
+                    OutlinedTextField(value = emailText, onValueChange = { emailText = it }, label = { Text("Correo Electrónico") }, modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp))
+
+                    var passwordText by rememberSaveable { mutableStateOf("") }
+                    OutlinedTextField(value = passwordText, onValueChange = { passwordText = it }, label = { Text("Contraseña") }, modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp))
                 }
                 Button(
                     onClick = {
@@ -136,8 +126,6 @@ fun iniciarsesion(navController: NavController) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp)
-
-
                 ) {
                     Text("Iniciar Sesión", color = Color.White)
                 }
