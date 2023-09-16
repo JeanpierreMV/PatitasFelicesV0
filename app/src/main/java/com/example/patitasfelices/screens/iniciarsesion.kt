@@ -63,7 +63,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 
 
 @Composable
-fun iniciarsesion(navController: NavController) {
+fun iniciarsesion(
+    navController: NavController,viewModel: loginViewModel = androidx.lifecycle.viewmodel.compose.viewModel() ) {
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -81,14 +83,10 @@ fun iniciarsesion(navController: NavController) {
         )
         Spacer(modifier = Modifier.height(2.dp)) // Separación de 2dp
 
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 40.dp)
-                .background(Color(android.graphics.Color.parseColor("#FFFBFB")))
-                .border(1.dp, Color.Gray, RoundedCornerShape(16.dp))
-                .padding(50.dp, 0.dp, 50.dp, 50.dp)
-                .clip(RoundedCornerShape(16.dp))
+        Surface(
+            modifier = Modifier.fillMaxWidth().padding(24.dp),
+            shape = MaterialTheme.shapes.medium,
+            color = Color.White
         ) {
             Column(
                 horizontalAlignment = Alignment.Start,
@@ -114,18 +112,21 @@ fun iniciarsesion(navController: NavController) {
 
 
                     var emailText by rememberSaveable { mutableStateOf("") }
-                    OutlinedTextField(value = emailText, onValueChange = { emailText = it }, label = { Text("Correo Electrónico") }, modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp))
+                    OutlinedTextField(value = emailText, onValueChange = { emailText = it }, label = { Text("Correo Electrónico") }, modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp))
 
                     var passwordText by rememberSaveable { mutableStateOf("") }
-                    OutlinedTextField(value = passwordText, onValueChange = { passwordText = it }, label = { Text("Contraseña") }, modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp))
+                    OutlinedTextField(value = passwordText, onValueChange = { passwordText = it }, label = { Text("Contraseña") }, modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp))
                 }
                 Button(
                     onClick = {
                         navController.navigate(route = appScreens.Inicio.route)
                     },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
+                    modifier = Modifier.padding(16.dp).align(Alignment.CenterHorizontally)
+
                 ) {
                     Text("Iniciar Sesión", color = Color.White)
                 }
@@ -142,7 +143,7 @@ fun iniciarsesion(navController: NavController) {
                         }
                     },
                     fontSize = 10.sp,
-                    modifier = Modifier
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
                         .padding(top = 16.dp, bottom = 8.dp)
                         .clickable {
                             navController.navigate(route = appScreens.registrar.route)
@@ -151,7 +152,8 @@ fun iniciarsesion(navController: NavController) {
                 Text(
                     text = "¿Olvidaste la contraseña?",
                     fontSize = 10.sp,
-                    modifier = Modifier.padding(top = 8.dp, bottom = 16.dp)
+                    modifier = Modifier.padding(top = 8.dp, bottom = 16.dp).align(Alignment.CenterHorizontally),
+
                 )
 
                 Spacer(modifier = Modifier.height(30.dp))

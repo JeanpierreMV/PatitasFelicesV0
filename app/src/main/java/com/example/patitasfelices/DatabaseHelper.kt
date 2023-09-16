@@ -5,19 +5,22 @@ import java.sql.DriverManager
 import java.sql.SQLException
 
 
-object DatabaseHelper {
-    private var connection: Connection? = null
+object DatabaseConnector {
 
-    fun connectToDatabase(): Connection? {
-        return try {
-            // Reemplaza los valores con los detalles de tu base de datos
+    private const val url = "jdbc:postgresql://dpg-ck272ifqj8ts73f8j86g-a.oregon-postgres.render.com:5432/patitasfelices"
+    private const val user = "patitasfelices_user"
+    private const val password = "f4ZweojKYoeRCVs9GRhp1iLLeKuahUDc"
 
-            connection = DriverManager.getConnection( "jdbc:mysql://root:3Q3DW8kuwpauX9mvNq72@containers-us-west-177.railway.app:6251/railway", "root","3Q3DW8kuwpauX9mvNq72")
-            connection
-
+    @JvmStatic
+    fun connect(): Connection? {
+        var conn: Connection? = null
+        try {
+            conn = DriverManager.getConnection(url, user, password)
+            println("Connected to the PostgreSQL server successfully.")
         } catch (e: SQLException) {
-            e.printStackTrace()
-            null
+            println(e.message)
         }
+        return conn
     }
 }
+

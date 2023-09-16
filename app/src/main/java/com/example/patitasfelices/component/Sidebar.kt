@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -46,68 +47,68 @@ import androidx.compose.ui.zIndex
 import com.example.patitasfelices.R
 import kotlinx.coroutines.launch
 
-@Composable
-fun Sidebar() {
-    val drawerState = rememberDrawerState(DrawerValue.Closed)
-    val scope = rememberCoroutineScope()
-    val items = listOf(Icons.Default.Favorite, Icons.Default.Face, Icons.Default.Email)
-    val selectedItem = remember { mutableStateOf(items[0]) }
+    @Composable
+    fun Sidebar() {
+        val drawerState = rememberDrawerState(DrawerValue.Closed)
+        val scope = rememberCoroutineScope()
+        val items = listOf(Icons.Default.Favorite, Icons.Default.Face, Icons.Default.Email)
+        val selectedItem = remember { mutableStateOf(items[0]) }
 
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        modifier = Modifier.fillMaxWidth(0.65f).zIndex(if (drawerState.isClosed) 0f else 1f),
-        drawerContent = {
-            ModalDrawerSheet(
-                drawerContainerColor = Color.Black.copy(alpha = 0.4f)
-            ) {
-                // Aquí colocamos tu logo centrado en la parte superior y ajustamos su tamaño
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
+        ModalNavigationDrawer(
+            drawerState = drawerState,
+            modifier = Modifier.fillMaxWidth(0.65f).zIndex(if (drawerState.isClosed) 0f else 10f),
+            drawerContent = {
+                ModalDrawerSheet(
+                    drawerContainerColor = Color.Black.copy(alpha = 0.4f)
                 ) {
-                    // Reemplaza "tu_logo" con la imagen de tu logo y ajusta el tamaño
-                    Image(
-                        painter = painterResource(id = R.drawable.logo2),
-                        contentDescription = null,
-                        modifier = Modifier.size(200.dp).align(Alignment.Center)
-                    )
-                }
+                    // Aquí colocamos tu logo centrado en la parte superior y ajustamos su tamaño
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
 
-                Spacer(Modifier.height(12.dp))
-                items.forEach { item ->
-                    NavigationDrawerItem(
-                        icon = { Icon(item, contentDescription = null) },
-                        label = { Text(item.name) },
-                        selected = item == selectedItem.value,
-                        onClick = {
-                            scope.launch { drawerState.close() }
-                            selectedItem.value = item
-                        },
-                        modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
-                    )
-                }
-            }
-        },
-        content = {
-            // Resto del contenido del Sidebar
-            Column(
-                modifier = Modifier.fillMaxSize().padding(16.dp)
-            ) {
-                Row(
-                    modifier = Modifier
-                        .align(Alignment.Start)
-                        .padding(8.dp)
-                ) {
-                    IconButton(
-                        onClick = { scope.launch { drawerState.open() } }
                     ) {
-                        Icon(Icons.Default.Menu, contentDescription = null)
+                        // Reemplaza "tu_logo" con la imagen de tu logo y ajusta el tamaño
+                        Image(
+                            painter = painterResource(id = R.drawable.logo2),
+                            contentDescription = null,
+                            modifier = Modifier.size(200.dp).align(Alignment.Center).offset(y = -50.dp)
+                        )
+                    }
+
+                    Spacer(Modifier.height(12.dp))
+                    items.forEach { item ->
+                        NavigationDrawerItem(
+                            icon = { Icon(item, contentDescription = null) },
+                            label = { Text(item.name) },
+                            selected = item == selectedItem.value,
+                            onClick = {
+                                scope.launch { drawerState.close() }
+                                selectedItem.value = item
+                            },
+                            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                        )
                     }
                 }
+            },
+            content = {
+                // Resto del contenido del Sidebar
+                Column(
+                    modifier = Modifier.fillMaxSize().padding(16.dp)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .align(Alignment.Start)
+                            .padding(8.dp)
+                    ) {
+                        IconButton(
+                            onClick = { scope.launch { drawerState.open() } }
+                        ) {
+                            Icon(Icons.Default.Menu, contentDescription = null)
+                        }
+                    }
 
-                // Aquí puedes agregar el resto de tus elementos de contenido
+                    // Aquí puedes agregar el resto de tus elementos de contenido
+                }
             }
-        }
-    )
-}
+        )
+    }

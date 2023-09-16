@@ -76,8 +76,14 @@
         implementation("androidx.compose.material3:material3-window-size-class:1.1.1")
         implementation(platform("androidx.compose:compose-bom:2023.03.00"))
         implementation("androidx.appcompat:appcompat:1.6.1")
-        implementation(files("libs\\mysql-connector-j-8.0.33.jar"))
-        implementation("com.google.firebase:firebase-firestore-ktx:24.7.1")
+        implementation ("org.postgresql:postgresql:42.2.5")
+
+        implementation(platform("com.google.firebase:firebase-bom:32.2.3"))
+        implementation("com.google.firebase:firebase-auth-ktx")
+        implementation("com.google.firebase:firebase-firestore-ktx")
+
+
+
         testImplementation("junit:junit:4.13.2")
         androidTestImplementation("androidx.test.ext:junit:1.1.5")
         androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
